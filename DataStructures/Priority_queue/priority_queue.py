@@ -78,16 +78,16 @@ def swim(my_heap, pos):
     while pos > 1:
         parent = pos // 2
 
-        child_node = lt.getElement(my_heap["elements"], pos)
-        parent_node = lt.getElement(my_heap["elements"], parent)
+        child_node = lt.get_element(my_heap["elements"], pos)
+        parent_node = lt.get_element(my_heap["elements"], parent)
 
         if not priority(my_heap, child_node, parent_node):
             # Ya está en la posición correcta, termina el ciclo naturalmente
             pos = 1  # fuerza la condición de salida sin usar break
         else:
             # Intercambiar posiciones
-            lt.changeInfo(my_heap["elements"], pos, parent_node)
-            lt.changeInfo(my_heap["elements"], parent, child_node)
+            lt.change_info(my_heap["elements"], pos, parent_node)
+            lt.change_info(my_heap["elements"], parent, child_node)
 
             # Actualizar los índices internos
             pqe.set_index(child_node, parent)
@@ -116,18 +116,18 @@ def get_first_priority(my_heap):
     if is_empty(my_heap):
         return None
 
-    first_entry = lt.getElement(my_heap["elements"], 1)
+    first_entry = lt.get_element(my_heap["elements"], 1)
     return pqe.get_value(first_entry)
 
 def remove(my_heap):
     if is_empty(my_heap):
         return None
 
-    root = lt.getElement(my_heap["elements"], 1)
+    root = lt.get_element(my_heap["elements"], 1)
     removed_value = pqe.get_value(root)
 
-    last = lt.getElement(my_heap["elements"], my_heap["size"])
-    lt.changeInfo(my_heap["elements"], 1, last)
+    last = lt.get_element(my_heap["elements"], my_heap["size"])
+    lt.change_info(my_heap["elements"], 1, last)
     pqe.set_index(last, 1)
 
     lt.removeLast(my_heap["elements"])
@@ -150,21 +150,21 @@ def sink(my_heap, pos):
 
         # Si existe hijo derecho, escoger el que tenga mayor prioridad
         if right <= size:
-            left_node = lt.getElement(my_heap["elements"], left)
-            right_node = lt.getElement(my_heap["elements"], right)
+            left_node = lt.get_element(my_heap["elements"], left)
+            right_node = lt.get_element(my_heap["elements"], right)
             if priority(my_heap, right_node, left_node):
                 best_child = right
 
-        current_node = lt.getElement(my_heap["elements"], pos)
-        child_node = lt.getElement(my_heap["elements"], best_child)
+        current_node = lt.get_element(my_heap["elements"], pos)
+        child_node = lt.get_element(my_heap["elements"], best_child)
 
         # Si el hijo no tiene mayor prioridad, estamos listos
         if not priority(my_heap, child_node, current_node):
             pos = size + 1  # fuerza fin del ciclo
         else:
             # Intercambiar
-            lt.changeInfo(my_heap["elements"], pos, child_node)
-            lt.changeInfo(my_heap["elements"], best_child, current_node)
+            lt.change_info(my_heap["elements"], pos, child_node)
+            lt.change_info(my_heap["elements"], best_child, current_node)
 
             # Actualizar índices
             pqe.set_index(child_node, pos)

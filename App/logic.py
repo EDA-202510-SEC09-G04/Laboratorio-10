@@ -35,8 +35,6 @@ data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 #  Importaciones
 # ___________________________________________________
 
-from DataStructures.Graph import adj_list_graph as gr
-from DataStructures.Map import map_linear_probing as m
 from DataStructures.List import single_linked_list as lt
 from DataStructures.Priority_queue  import priority_queue as pq
 """
@@ -50,6 +48,7 @@ recae sobre el controlador.
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________
+data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 
 
 def init():
@@ -71,18 +70,15 @@ def new_analyzer():
     """
     try:
         analyzer = {
-            'stops': None,
+            'stops': {},
             'connections': None,
             'components': None,
-            'paths': None
+            'paths': None,
+            'pq': pq.new_heap(True)
         }
 
      
 
-        # ___________________________________________________
-        #  TODO crear la cola de prioriad y cree las funciones 
-        # necesarias para la carga de datos
-        # ___________________________________________________
 
         return analyzer
     except Exception as exp:
@@ -94,8 +90,31 @@ def new_analyzer():
 # ___________________________________________________
 
 
-def load_services(file):
-     
+def load_services(analyzer, file):
+    try:
+        with open(file, encoding="utf-8") as csvfile:
+            input_file = csv.DictReader(csvfile)
+
+            for row in input_file:
+                stop_code = row['BusStopCode']
+                distance = float(row['Distance'])
+                if stop_code not in analyzer['stops']:
+                    analyzer['stops'][stop_code] = {
+                        'services': [],
+                        'min_distance': distance
+                    }
+                else:
+                    if distance < analyzer['stops'][stop_code]['min_distance']:
+                        analyzer['stops'][stop_code]['min_distance'] = distance
+                analyzer['stops'][stop_code]['services'].append(row)
+                pq.insert(analyzer['pq'], row, distance)
+
+        print("Datos cargados: {} paradas.".format(len(analyzer['stops'])))
+        return analyzer
+
+    except Exception as e:
+        print("Error al cargar los datos:", e)
+        return analyzer 
 
 
 

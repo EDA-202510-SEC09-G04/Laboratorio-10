@@ -28,6 +28,7 @@
 import sys
 import threading
 from App import logic
+import os
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -40,8 +41,9 @@ operación seleccionada.
 #  Variables
 # ___________________________________________________
 
-
-servicefile = 'bus_routes_14000.csv'
+data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
+servicefile = 'bus_routes_50.csv'
+servicefile = data_dir+servicefile
 initialStation = None
 
 # ___________________________________________________
